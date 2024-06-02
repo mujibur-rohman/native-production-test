@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { AntdRegistry } from "@ant-design/nextjs-registry";
 import "./globals.css";
+import Navbar from "@/components/Organisms/Navbar";
+import QueryProvider from "@/providers/QueryClient";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +20,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <QueryProvider>
+          <AntdRegistry>
+            <Toaster richColors />
+            <Navbar />
+            {children}
+          </AntdRegistry>
+        </QueryProvider>
+      </body>
     </html>
   );
 }
