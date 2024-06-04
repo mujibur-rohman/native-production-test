@@ -1,20 +1,23 @@
-import Button from "@/components/Atoms/Button";
-import ActionTable from "@/components/Moleculs/ActionTable";
-import ProductService from "@/services/product.service";
-import { RootState } from "@/store";
-import { addCart, removeCart } from "@/store/cart";
-import { ProductType } from "@/types/product.type";
-import { useQueryClient } from "@tanstack/react-query";
-import { ColumnDef } from "@tanstack/react-table";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "sonner";
+import Button from "@/components/Atoms/Button"; // Importing Button component
+import ActionTable from "@/components/Moleculs/ActionTable"; // Importing ActionTable component
+import ProductService from "@/product.service"; // Importing ProductService
+import { RootState } from "@/store"; // Importing RootState from store
+import { addCart, removeCart } from "@/store/cart"; // Importing addCart and removeCart actions from cart store
+import { ProductType } from "@/types/product.type"; // Importing ProductType from types
+import { useQueryClient } from "@tanstack/react-query"; // Importing useQueryClient hook from react-query
+import { ColumnDef } from "@tanstack/react-table"; // Importing ColumnDef from react-table
+import { useDispatch, useSelector } from "react-redux"; // Importing useDispatch and useSelector hooks from react-redux
+import { toast } from "sonner"; // Importing toast from sonner library
 
+// Custom hook for handling product data
 function useProduct({ currentPage }: { currentPage: number }) {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient(); // Initializing queryClient from useQueryClient hook
 
+  // Fetching cart state and dispatch function from Redux store
   const cart = useSelector((state: RootState) => state.cart.cart);
   const dispatch = useDispatch();
 
+  // Table header configuration
   const tableHeader: ColumnDef<ProductType>[] = [
     {
       accessorKey: "no",
@@ -42,6 +45,7 @@ function useProduct({ currentPage }: { currentPage: number }) {
       accessorKey: "cart",
       header: "To Cart",
       cell: ({ row }) => {
+        // Rendering Add to Cart or Remove button based on cart status
         if (cart.find((c) => c.id === row.original.id)) {
           return (
             <Button variant="outlined" onClick={() => dispatch(removeCart(row.original))}>
@@ -59,6 +63,7 @@ function useProduct({ currentPage }: { currentPage: number }) {
     {
       header: "Action",
       cell: ({ row }) => {
+        // Rendering ActionTable component for additional actions
         return (
           <ActionTable
             data={row.original}
@@ -77,7 +82,8 @@ function useProduct({ currentPage }: { currentPage: number }) {
       },
     },
   ];
-  return { tableHeader };
+
+  return { tableHeader }; // Returning table header configuration
 }
 
-export default useProduct;
+export default useProduct; // Exporting the useProduct hook

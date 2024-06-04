@@ -11,7 +11,7 @@ import TextArea from "antd/es/input/TextArea";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import CategoryService from "@/services/category.service";
 import UploadImage from "../Moleculs/UploadImage";
-import ProductService from "@/services/product.service";
+import ProductService from "@/product.service";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -24,7 +24,9 @@ type PropsFormProductModal = {
   productId?: number;
 };
 
+// Function to render the form content
 function ContentForm({ setOpenModal, product }: { setOpenModal: Dispatch<SetStateAction<boolean>>; product?: ProductType }) {
+  // Fetch categories using react-query
   const { data: categories, isLoading: isLoadingCategory } = useQuery({
     queryKey: ["categories"],
     queryFn: async () => {
@@ -34,6 +36,7 @@ function ContentForm({ setOpenModal, product }: { setOpenModal: Dispatch<SetStat
 
   const queryClient = useQueryClient();
 
+  // Initialize form with react-hook-form and zod for validation
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
     defaultValues: {
@@ -45,9 +48,11 @@ function ContentForm({ setOpenModal, product }: { setOpenModal: Dispatch<SetStat
     },
   });
 
+  // Function to handle form submission
   async function onSubmit(values: z.infer<typeof productSchema>) {
     try {
       if (product) {
+        // Update existing product
         await ProductService.update(product.id, {
           categoryId: values.categoryId,
           description: values.description,
@@ -57,6 +62,7 @@ function ContentForm({ setOpenModal, product }: { setOpenModal: Dispatch<SetStat
         });
         queryClient.invalidateQueries({ queryKey: ["product"] });
       } else {
+        // Create new product
         await ProductService.create({
           categoryId: values.categoryId,
           description: values.description,
@@ -181,9 +187,11 @@ function ContentForm({ setOpenModal, product }: { setOpenModal: Dispatch<SetStat
   );
 }
 
+// Main component for the product form modal
 function FormProductModal({ children, productId }: PropsFormProductModal) {
   const [isOpen, setIsOpen] = useState(false);
 
+  // Fetch product details if productId is provided and modal is open
   const { data: product, isLoading } = useQuery({
     queryKey: ["product", productId],
     enabled: !!productId && isOpen,

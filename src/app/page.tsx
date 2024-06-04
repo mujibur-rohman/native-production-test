@@ -5,7 +5,7 @@ import { DataTable } from "@/components/Organisms/Datatable";
 import { useDebounce } from "@/hooks/useDebounce";
 import useProduct from "@/hooks/useProduct";
 import { LIMIT_TABLE, TOTAL_DATA } from "@/lib/constants";
-import ProductService from "@/services/product.service";
+import ProductService from "@/product.service";
 import { SearchOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { Input, Pagination } from "antd";
