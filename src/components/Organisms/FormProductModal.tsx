@@ -192,7 +192,13 @@ function FormProductModal({ children, productId }: PropsFormProductModal) {
   const [isOpen, setIsOpen] = useState(false);
 
   // Fetch product details if productId is provided and modal is open
-  const { data: product, isLoading } = useQuery({
+  const {
+    data: product,
+    isLoading,
+    isError,
+    isFetching,
+    refetch,
+  } = useQuery({
     queryKey: ["product", productId],
     enabled: !!productId && isOpen,
     queryFn: async () => {
@@ -208,6 +214,11 @@ function FormProductModal({ children, productId }: PropsFormProductModal) {
         !!productId && isLoading ? (
           <div className="flex justify-center">
             <Spin />
+          </div>
+        ) : isError && !isFetching ? (
+          <div className="flex flex-col justify-center gap-3 items-center">
+            <p>there is an error, please try again</p>
+            <Button onClick={() => refetch()}>Refresh</Button>
           </div>
         ) : (
           <ContentForm setOpenModal={setIsOpen} product={product} />
