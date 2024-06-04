@@ -9,6 +9,7 @@ import { ColumnDef } from "@tanstack/react-table"; // Importing ColumnDef from r
 import { useDispatch, useSelector } from "react-redux"; // Importing useDispatch and useSelector hooks from react-redux
 import { toast } from "sonner"; // Importing toast from sonner library
 import dayjs from "dayjs"; // Importing dayjs from dayjs library
+import "dayjs/locale/id";
 
 // Custom hook for handling product data
 function useProduct({ currentPage }: { currentPage: number }) {
