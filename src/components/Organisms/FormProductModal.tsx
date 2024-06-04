@@ -60,7 +60,7 @@ function ContentForm({ setOpenModal, product }: { setOpenModal: Dispatch<SetStat
           price: values.price,
           title: values.title,
         });
-        queryClient.invalidateQueries({ queryKey: ["product"] });
+        queryClient.invalidateQueries({ queryKey: ["product", product.id] });
       } else {
         // Create new product
         await ProductService.create({
@@ -72,7 +72,7 @@ function ContentForm({ setOpenModal, product }: { setOpenModal: Dispatch<SetStat
         });
       }
       setOpenModal(false);
-      toast.success("Create Product Successfully");
+      toast.success("Save Product Successfully");
       queryClient.invalidateQueries({ queryKey: ["products"] });
     } catch (error) {
       toast.error("there is an error");
