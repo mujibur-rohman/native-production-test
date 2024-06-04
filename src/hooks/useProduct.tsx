@@ -8,6 +8,7 @@ import { useQueryClient } from "@tanstack/react-query"; // Importing useQueryCli
 import { ColumnDef } from "@tanstack/react-table"; // Importing ColumnDef from react-table
 import { useDispatch, useSelector } from "react-redux"; // Importing useDispatch and useSelector hooks from react-redux
 import { toast } from "sonner"; // Importing toast from sonner library
+import dayjs from "dayjs"; // Importing dayjs from dayjs library
 
 // Custom hook for handling product data
 function useProduct({ currentPage }: { currentPage: number }) {
@@ -39,6 +40,13 @@ function useProduct({ currentPage }: { currentPage: number }) {
       header: "Price",
       cell: ({ row }) => {
         return <span className="whitespace-nowrap">${row.original.price}</span>;
+      },
+    },
+    {
+      accessorKey: "date",
+      header: "Create Date",
+      cell: ({ row }) => {
+        return <span className="whitespace-nowrap">{dayjs(row.original.creationAt).locale("id").format("DD MMMM YYYY")}</span>;
       },
     },
     {

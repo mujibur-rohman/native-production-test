@@ -7,6 +7,8 @@ export type ProductType = {
   description: string;
   images: string[];
   category: CategoryType;
+  creationAt: Date;
+  updatedAt: Date;
 };
 
 export type RequestParamsGetProductDto = {
