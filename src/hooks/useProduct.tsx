@@ -1,12 +1,19 @@
+import Button from "@/components/Atoms/Button";
 import ActionTable from "@/components/Moleculs/ActionTable";
 import ProductService from "@/services/product.service";
+import { RootState } from "@/store";
+import { addCart, removeCart } from "@/store/cart";
 import { ProductType } from "@/types/product.type";
 import { useQueryClient } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 
 function useProduct({ currentPage }: { currentPage: number }) {
   const queryClient = useQueryClient();
+
+  const cart = useSelector((state: RootState) => state.cart.cart);
+  const dispatch = useDispatch();
 
   const tableHeader: ColumnDef<ProductType>[] = [
     {
@@ -29,6 +36,24 @@ function useProduct({ currentPage }: { currentPage: number }) {
       header: "Price",
       cell: ({ row }) => {
         return <span className="whitespace-nowrap">${row.original.price}</span>;
+      },
+    },
+    {
+      accessorKey: "cart",
+      header: "To Cart",
+      cell: ({ row }) => {
+        if (cart.find((c) => c.id === row.original.id)) {
+          return (
+            <Button variant="outlined" onClick={() => dispatch(removeCart(row.original))}>
+              Remove
+            </Button>
+          );
+        }
+        return (
+          <Button variant="default" onClick={() => dispatch(addCart(row.original))}>
+            Add To Cart
+          </Button>
+        );
       },
     },
     {
